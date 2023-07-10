@@ -13,10 +13,10 @@ public class Piece {
     int[][] grid;
     int type;
 
-    public Piece(int x, int y, int[][] grid) {
+    public Piece(int x, int y, int id, int[][] grid) {
         this.x = x;
         this.y = y;
-        this.id = Arrays.stream(grid[0]).max().orElse(-1);
+        this.id = id;
         StringBuilder sb = new StringBuilder();
         for (int[] row : grid) {
             for (int el : row)
@@ -34,11 +34,11 @@ public class Piece {
         int nx = x+dx;
         int ny = y+dy;
         int[][] boardGrid = board.getGrid();
-        if(!(0<=nx && nx+grid.length<= HEIGHT && 0<=ny && ny+grid[0].length<= WIDTH)) return false;
+        if(!(0<=nx && nx+grid.length<= ROWS && 0<=ny && ny+grid[0].length<= COLS)) return false;
         for(int row=0;row<grid.length;row++)
             for(int col=0;col<grid[0].length;col++){
                 int curId = boardGrid[nx+row][ny+col];
-                if(!(curId==-1 || curId==this.id || grid[row][col]==-1))
+                if(!(curId==-1 || curId==this.id || grid[row][col]==0))
                     return false;
             }
         return true;
@@ -51,8 +51,9 @@ public class Piece {
         int[][] boardGrid = board.getGrid();
         for(int row=0;row<grid.length;row++)
             for(int col=0;col<grid[0].length;col++)
-                if(boardGrid[x+row][y+col]==-1 || boardGrid[x+row][y+col]==this.id)
-                    boardGrid[x+row][y+col] = val==-1?-1:grid[row][col];
+                if((boardGrid[x+row][y+col]==-1 ||
+                        boardGrid[x+row][y+col]==this.id) && grid[row][col]!=0)
+                    boardGrid[x+row][y+col] = val==-1?-1:id;
     }
 
     public void move(int dx, int dy, Board board) {

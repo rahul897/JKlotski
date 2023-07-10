@@ -8,23 +8,32 @@ import java.util.List;
 import java.util.Map;
 
 import static com.klotski.Constants.*;
+import static java.lang.Math.abs;
 
 @Data
-public class Board{
+public class Board implements Comparable<Board>{
     int[][] grid;
     List<Piece> pieces;
     Map<Integer, Piece> pieceMap;
     String boardKey = null;
     Board parent = null;
+    Piece pick;
+    int gx,gy;
+    int dist;
+    int steps = Integer.MAX_VALUE;
 
-    public Board(int h, int w, List<Piece> pieces) {
-        HEIGHT = h;
-        WIDTH = w;
-        this.grid = new int[HEIGHT][WIDTH];
+    public Board(int h, int w, int gx, int gy, List<Piece> pieces) {
+        ROWS = h;
+        COLS = w;
+        this.gx = gx;
+        this.gy = gy;
+        this.grid = new int[ROWS][COLS];
         Arrays.stream(grid).forEach(a->Arrays.fill(a,-1));
         this.pieces = pieces;
         this.pieceMap = new HashMap<>();
         pieces.forEach(this::addPiece);
+        this.pick = this.pieceMap.get(1);
+        this.dist = abs(pick.y-this.gy)+abs(pick.x-this.gx);
     }
 
     private void addPiece(Piece p) {
@@ -33,8 +42,7 @@ public class Board{
     }
 
     public boolean isSolved(){
-        return grid[0][WIDTH - 1] == 0 && grid[1][WIDTH - 1] == 0;
-//        return grid[HEIGHT-1][1]==0 && grid[HEIGHT -1][2]==0;
+        return pick.x==gx && pick.y==gy;
     }
 
     public String getBoardKey(){
@@ -44,11 +52,6 @@ public class Board{
                 sb.append(effectiveType.getOrDefault(""+el,0));
             }
         }
-//        for(Piece piece:pieces){
-//            sb.append(piece.getX());
-//            sb.append(piece.getY());
-//            sb.append(piece.getType());
-//        }
         boardKey = sb.toString();
         return boardKey;
     }
@@ -63,4 +66,8 @@ public class Board{
         System.out.println("------------------------------");
     }
 
+    @Override
+    public int compareTo(Board b) {
+        return (this.dist+this.steps)-(b.dist+b.steps);
+    }
 }

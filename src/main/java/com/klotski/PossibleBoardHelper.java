@@ -12,8 +12,8 @@ public class PossibleBoardHelper {
         for(Piece piece: board.getPieces())
             for(int[] dir: new int[][]{{-1,0},{1,0},{0,-1},{0,1}}) {
                 if (piece.checkMove(dir[0], dir[1], board)) {
-                    Board newBoard = new Board(HEIGHT, WIDTH,
-                            board.getPieces().stream().map(p->new Piece(p.x,p.y,p.grid)).collect(Collectors.toList())
+                    Board newBoard = new Board(ROWS, COLS, board.gx, board.gy,
+                            board.getPieces().stream().map(p->new Piece(p.x, p.y, p.id, p.grid)).collect(Collectors.toList())
                     );
                     Piece newPiece = newBoard.pieceMap.get(piece.getId());
                     newPiece.move(dir[0], dir[1], newBoard);
