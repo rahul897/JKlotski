@@ -17,7 +17,9 @@ public class Board{
     String boardKey = null;
     Board parent = null;
 
-    public Board(List<Piece> pieces) {
+    public Board(int h, int w, List<Piece> pieces) {
+        HEIGHT = h;
+        WIDTH = w;
         this.grid = new int[HEIGHT][WIDTH];
         Arrays.stream(grid).forEach(a->Arrays.fill(a,-1));
         this.pieces = pieces;
@@ -31,8 +33,8 @@ public class Board{
     }
 
     public boolean isSolved(){
-//        return grid[0][WIDTH - 1] == 0 && grid[1][WIDTH - 1] == 0;
-        return grid[HEIGHT-1][1]==0 && grid[HEIGHT -1][2]==0;
+        return grid[0][WIDTH - 1] == 0 && grid[1][WIDTH - 1] == 0;
+//        return grid[HEIGHT-1][1]==0 && grid[HEIGHT -1][2]==0;
     }
 
     public String getBoardKey(){

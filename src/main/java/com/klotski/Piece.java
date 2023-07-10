@@ -38,7 +38,7 @@ public class Piece {
         for(int row=0;row<grid.length;row++)
             for(int col=0;col<grid[0].length;col++){
                 int curId = boardGrid[nx+row][ny+col];
-                if(!(curId==-1 || curId==this.id))
+                if(!(curId==-1 || curId==this.id || grid[row][col]==-1))
                     return false;
             }
         return true;
@@ -51,7 +51,8 @@ public class Piece {
         int[][] boardGrid = board.getGrid();
         for(int row=0;row<grid.length;row++)
             for(int col=0;col<grid[0].length;col++)
-                boardGrid[x+row][y+col] = val==-1?-1:grid[row][col];
+                if(boardGrid[x+row][y+col]==-1 || boardGrid[x+row][y+col]==this.id)
+                    boardGrid[x+row][y+col] = val==-1?-1:grid[row][col];
     }
 
     public void move(int dx, int dy, Board board) {
